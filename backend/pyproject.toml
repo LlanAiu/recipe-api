@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "f24-pledge-project"
+version = "0.1.0"
+description = ""
+authors = ["Alan Liu <liualan998@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+fastapi = {extras = ["standard"], version = "^0.115.4"}
+pydantic = "^2.9.2"
+pydantic-settings = "^2.6.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
