@@ -1,10 +1,13 @@
-# builtin 
+# builtin
 
 # external
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # internal
 
 
 class Environment(BaseSettings):
-    ALAN_KEY: int
+    SUPABASE_PROJECT_URL: str
+    SUPABASE_API_KEY: str
+
+    model_config: SettingsConfigDict = SettingsConfigDict(env_file='.env')
