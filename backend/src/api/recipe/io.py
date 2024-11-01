@@ -15,4 +15,4 @@ class BuildRecipeOutput(BaseModel):
 class RecipeInformationOutput(BaseModel):
     recipe_name: str
     ingredient_amounts: list[str]
-    directions: str
+    directions: list[str]
