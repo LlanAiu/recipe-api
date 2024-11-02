@@ -10,11 +10,13 @@ from pydantic import BaseModel
 class RetrieveRecipeParams(BaseModel):
     id: int
 
+class RecipesFromIngredientsParams(BaseModel):
+    ingredients: list[str]
+
 class RecipeAttribute(Enum):
     NAME = "name"
     INGREDIENTS = "ingredient_amounts"
     DIRECTIONS = "directions"
-
 
 def filter_misc_chars(char: str) -> bool:
     filtered_chars: str = "\"[]"
@@ -51,3 +53,5 @@ class RecipeData(BaseModel):
 
         return directions_list
 
+class RecipeList(BaseModel):
+    recipes: list[RecipeData]
