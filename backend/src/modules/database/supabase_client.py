@@ -87,3 +87,5 @@ class SupabaseClient():
 
         except AssertionError as err:
             print(err)
+
+            return []

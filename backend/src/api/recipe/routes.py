@@ -41,20 +41,17 @@ def recipe_data_to_output(data: RecipeData) -> RecipeInformationOutput:
 
 @recipe_router.post("/find")
 def build_recipe_from_ingredients(inputs: BuildRecipeInput, request: Request) -> BuildRecipeOutput:
-    # TODO: retrieve all possible recipes from database and return a list of them
-    try:
-        supabase_client: SupabaseClient = request.app.state.supabase_client
-
-        params: RecipesFromIngredientsParams = RecipesFromIngredientsParams(ingredients=inputs.ingredients)
-
-        possible_recipes: list[RecipeData] = supabase_client.retrieve_recipes_from_ingredients(params=params)
-
-        assert (len(possible_recipes) != 0)
-
-        recipe_output: list[RecipeInformationOutput] = map(recipe_data_to_output, possible_recipes)
-
-        return BuildRecipeOutput(possible_recipes=recipe_output)
-    
-    except AssertionError as err:
         
-        return BuildRecipeOutput(possible_recipes=["None"])
+    supabase_client: SupabaseClient = request.app.state.supabase_client
+
+    params: RecipesFromIngredientsParams = RecipesFromIngredientsParams(ingredients=inputs.ingredients)
+
+    possible_recipes: list[RecipeData] = supabase_client.retrieve_recipes_from_ingredients(params=params)
+
+    if(len(possible_recipes) == 0):
+        none: RecipeInformationOutput = RecipeInformationOutput(recipe_name="None", ingredient_amounts=[], directions=[])
+        return BuildRecipeOutput(possible_recipes=[none])
+
+    recipe_output: list[RecipeInformationOutput] = map(recipe_data_to_output, possible_recipes)
+
+    return BuildRecipeOutput(possible_recipes=recipe_output)
