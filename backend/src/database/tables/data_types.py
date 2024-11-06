@@ -55,3 +55,18 @@ class RecipeData(BaseModel):
 
 class RecipeList(BaseModel):
     recipes: list[RecipeData]
+
+class RecipeIngredientCount(BaseModel):
+    recipe_id: int
+    ingredient_count: int
+
+class RecipeIngredient(BaseModel):
+    recipe_id: int
+    ingredient_id: int
+
+class RecipesUsingIngredient(BaseModel):
+    id: int
+    recipes: list[int]
+
+class RecipesFromIngredients(BaseModel):
+    recipe_ingredients: list[RecipesUsingIngredient]

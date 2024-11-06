@@ -5,7 +5,8 @@ from fastapi import APIRouter, Request
 
 # internal
 from .io import BuildRecipeInput, BuildRecipeOutput, RecipeInformationOutput
-from src.modules.database import SupabaseClient, RecipeData, RetrieveRecipeParams, RecipesFromIngredientsParams
+from src.database import SupabaseClient, RecipeData, RetrieveRecipeParams, RecipesFromIngredientsParams
+from src.modules import RecipeFinder
 
 
 recipe_router: APIRouter = APIRouter(prefix="/recipe")
@@ -18,7 +19,7 @@ def get_recipe_information(recipe_id: int, request: Request) -> RecipeInformatio
 
     try:
         params: RetrieveRecipeParams = RetrieveRecipeParams(id=recipe_id)
-        data: RecipeData = supabase_client.retrieve_recipe_data(params=params)
+        data: RecipeData = supabase_client.recipes_table.retrieve_recipe(params=params)
 
         recipe_name: str = data.get_name()
         ingredients_list: list[str] = data.get_ingredients_list()
@@ -42,11 +43,11 @@ def recipe_data_to_output(data: RecipeData) -> RecipeInformationOutput:
 @recipe_router.post("/find")
 def build_recipe_from_ingredients(inputs: BuildRecipeInput, request: Request) -> BuildRecipeOutput:
         
-    supabase_client: SupabaseClient = request.app.state.supabase_client
+    recipe_finder: RecipeFinder = request.app.state.recipe_finder
 
     params: RecipesFromIngredientsParams = RecipesFromIngredientsParams(ingredients=inputs.ingredients)
 
-    possible_recipes: list[RecipeData] = supabase_client.retrieve_recipes_from_ingredients(params=params)
+    possible_recipes: list[RecipeData] = recipe_finder.retrieve_recipes_from_ingredients(params=params)
 
     if(len(possible_recipes) == 0):
         none: RecipeInformationOutput = RecipeInformationOutput(recipe_name="None", ingredient_amounts=[], directions=[])
