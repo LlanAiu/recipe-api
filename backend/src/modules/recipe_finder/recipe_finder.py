@@ -61,6 +61,7 @@ class RecipeFinder():
         return possible_recipes
 
     def retrieve_recipes_from_ingredients(self, params: RecipesFromIngredientsParams) -> list[RecipeData]:
+        params.clean_ingredient_format()
             
         data: RecipesFromIngredients = self.supabase_client.ingredients_table.get_recipes_using_ingredients(params=params)
 

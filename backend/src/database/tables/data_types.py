@@ -13,6 +13,11 @@ class RetrieveRecipeParams(BaseModel):
 class RecipesFromIngredientsParams(BaseModel):
     ingredients: list[str]
 
+    def clean_ingredient_format(self):
+        for (i, ingredient) in enumerate(self.ingredients):
+            self.ingredients[i] = ingredient.lower().strip()
+
+
 class RecipeAttribute(Enum):
     NAME = "name"
     INGREDIENTS = "ingredient_amounts"
