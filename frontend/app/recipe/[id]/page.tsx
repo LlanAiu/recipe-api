@@ -10,8 +10,8 @@ async function getRecipeData(id: number): Promise<RecipeData> {
 } 
 
 
-export default async function RecipeInformation( { params } : {params: {id: number}}){
-    const { id } = await params;
+export default async function RecipeInformation( { params } : {params: Promise<{id: number}>}){
+    const id = (await params).id;
     
     const recipeData: RecipeData = await getRecipeData(id);
 
