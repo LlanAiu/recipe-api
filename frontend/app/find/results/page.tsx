@@ -10,9 +10,9 @@ async function postIngredients(ingredients: string[]): Promise<RecipeData[]> {
 }
 
 export default async function ResultsPage({ searchParams }: {
-    searchParams?: {
+    searchParams?: Promise<{
         ingredients: string
-    }
+    }>
 }) {
 
     const params = await searchParams;
