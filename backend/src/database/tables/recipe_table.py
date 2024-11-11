@@ -30,9 +30,9 @@ class RecipeTable():
             ingredients_data: str = data.get(RecipeAttribute.INGREDIENTS.value)
             directions_data: str = data.get(RecipeAttribute.DIRECTIONS.value)
 
-            return RecipeData(name=name_data, ingredients=ingredients_data, directions=directions_data)
+            return RecipeData(id=recipe_id,name=name_data, ingredients=ingredients_data, directions=directions_data)
         
         except APIError as err:
             print(err)
             
-            return RecipeData(name="", ingredients="", directions="")
+            return RecipeData(id=recipe_id, name="", ingredients="", directions="")

@@ -35,6 +35,7 @@ def clean_string(string: str) -> str:
     return filtered_string.strip()
 
 class RecipeData(BaseModel):
+    id: int
     name: str
     ingredients: str
     directions: str

@@ -1,4 +1,4 @@
-import RecipeClient from '@/app/data/recipeClient';
+import RecipeClient from '@/app/data/recipe-client';
 import { RecipeData } from '@/app/data/types';
 
 

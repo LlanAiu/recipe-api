@@ -37,7 +37,7 @@ export default class RecipeClient {
 
         this.client = axios.create({
             baseURL: BACKEND_URL,
-            timeout: 5000,
+            timeout: 50000,
         });
     }
 
@@ -75,6 +75,30 @@ export default class RecipeClient {
             name: data["recipe_name"],
             ingredients: data["ingredient_amounts"],
             directions: data["directions"]
+        }
+    }
+
+    public async getPossibleRecipes(ingredients: string[]): Promise<RecipeData[]>{
+        const response: AxiosResponse | undefined = await this.client
+            .post("/recipe/find", {
+                ingredients: ingredients
+            })
+            .catch((error) => {
+                console.log("Failed to fetch possible recipes");
+                console.log(error)
+                return undefined;
+            });
+
+        if(!response){
+            return [];
+        }
+
+        const recipes: RecipeData[] = response.data["possible_recipes"] as RecipeData[];
+
+        if(recipes.length === 0){
+            return [];
+        } else {
+            return recipes;
         }
     }
 
