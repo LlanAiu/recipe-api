@@ -1,9 +1,12 @@
 
+import RecipeClient from '../data/recipe-client';
 import RecipeSearch from './recipe-search';
 import { redirect } from 'next/navigation';
 
 async function fetchIngredients(): Promise<string[]> {
-    return ['beef', 'butter', 'nuts', 'cream of mushroom soup', 'chicken breasts', 'sour cream', 'bite size shredded rice biscuits', 'brown sugar', 'milk', 'vanilla'];
+    const recipeClient: RecipeClient = RecipeClient.getInstance();
+
+    return recipeClient.getAllIngredients();
 }
 
 export default async function Page(){

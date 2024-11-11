@@ -7,7 +7,7 @@ import IngredientSearchResult from './ingredient-search';
 const MAX_SEARCH_RESULTS: number = 10;
 
 function truncateArray(arr: string[]): string[] {
-    let maxIndex = Math.max(arr.length, MAX_SEARCH_RESULTS);
+    let maxIndex = Math.min(arr.length, MAX_SEARCH_RESULTS);
     return arr.slice(0, maxIndex);
 }
 
@@ -15,7 +15,7 @@ export default function RecipeSearch({ ingredientsList } : { ingredientsList: st
 
     const [ingredients, setIngredients] = useState<string[]>([]);
     const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
-    let allIngredients = ingredientsList;
+    const allIngredients = ingredientsList;
 
     const inputRef = useRef(null);
     useOutsideAlerter(inputRef, () => handleFocus("BLUR", undefined));
@@ -44,6 +44,7 @@ export default function RecipeSearch({ ingredientsList } : { ingredientsList: st
                 setIngredients(s => truncated);
             } else {
                 const all: string[] = truncateArray(allIngredients);
+                console.log(all.length);
                 setIngredients(s => all);
             }
         } else {

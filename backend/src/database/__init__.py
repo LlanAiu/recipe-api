@@ -7,5 +7,7 @@ from .tables.data_types import (
     RecipeIngredientCount,
     RecipeIngredient,
     RecipesFromIngredients,
-    RecipesUsingIngredient
+    RecipesUsingIngredient,
+    Ingredient,
+    IngredientList
 )

@@ -12,3 +12,7 @@ export type ServerRecipeData = {
     ingredient_amounts: string[],
     directions: string[]
 }
+
+export type ServerIngredientData = {
+    name: string
+}

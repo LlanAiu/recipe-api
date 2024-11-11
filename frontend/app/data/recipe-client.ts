@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { RecipeData, ServerRecipeData } from './types';
+import { RecipeData, ServerIngredientData, ServerRecipeData } from './types';
 
 
 const BACKEND_URL_DEV: string | undefined = process.env.BACKEND_DEV_URL;
@@ -110,6 +110,26 @@ export default class RecipeClient {
         } else {
             return recipes;
         }
+    }
+
+    public async getAllIngredients(): Promise<string[]> {
+        const response: AxiosResponse | undefined = await this.client
+            .get("/ingredient/all")
+            .catch((error) => {
+                console.log("Failed to fetch ingredients");
+                console.log(error);
+                return undefined;
+            });
+
+        if(!response){
+            return [];
+        }
+
+        const data: ServerIngredientData[] = response.data["ingredients_list"] as ServerIngredientData[];
+
+        const ingredients: string[] = data.map((ingredient: ServerIngredientData) => ingredient.name);
+
+        return ingredients;
     }
 
 }

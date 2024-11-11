@@ -4,9 +4,9 @@ import RecipeClient from '@/app/data/recipe-client';
 import RecipeCard from './recipe-card';
 
 async function postIngredients(ingredients: string[]): Promise<RecipeData[]> {
-    const instance: RecipeClient = RecipeClient.getInstance();
+    const recipeClient: RecipeClient = RecipeClient.getInstance();
 
-    return await instance.getPossibleRecipes(ingredients);
+    return await recipeClient.getPossibleRecipes(ingredients);
 }
 
 export default async function ResultsPage({ searchParams }: {

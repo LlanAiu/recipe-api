@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 
 # internal
-from src.api import recipe_router
+from src.api import recipe_router, ingredient_router
 from src.globals import Environment
 from src.database import SupabaseClient
 from src.modules import RecipeFinder
@@ -36,3 +36,4 @@ def read_root(request: Request):
     return {"Hello" : "World"}
 
 app.include_router(router=recipe_router)
+app.include_router(router=ingredient_router)

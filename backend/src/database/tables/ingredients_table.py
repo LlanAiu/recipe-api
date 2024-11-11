@@ -6,7 +6,7 @@ from postgrest import SyncRequestBuilder, APIResponse
 from postgrest.exceptions import APIError
 
 # internal
-from .data_types import RecipesFromIngredientsParams, RecipesFromIngredients, RecipesUsingIngredient
+from .data_types import RecipesFromIngredientsParams, RecipesFromIngredients, RecipesUsingIngredient, Ingredient, IngredientList
 
 
 def to_recipe_ingredient(data: dict) -> RecipesUsingIngredient:
@@ -27,6 +27,19 @@ def to_recipe_ingredient(data: dict) -> RecipesUsingIngredient:
             recipe_ids.append(recipe_id)
 
     return RecipesUsingIngredient(id=ingredient_id, recipes=recipe_ids)
+
+def to_ingredient(data: dict) -> Ingredient:
+    valid_data: bool = "name" in data.keys()
+
+    if(not valid_data):
+        raise ValueError("Invalid ingredient data")
+    
+    ingredient_name: str = data.get("name")
+
+    return Ingredient(name=ingredient_name)
+
+def sort_by_name(ingredient: Ingredient) -> str:
+    return ingredient.name
 
 class IngredientsTable():
     ingredients_table: SyncRequestBuilder
@@ -51,7 +64,7 @@ class IngredientsTable():
                 none: list[RecipesUsingIngredient] = []
                 return RecipesFromIngredients(recipe_ingredients=none)
 
-            recipe_ingredients: list[RecipesUsingIngredient] = map(to_recipe_ingredient, data)
+            recipe_ingredients: list[RecipesUsingIngredient] = list(map(to_recipe_ingredient, data))
 
             return RecipesFromIngredients(recipe_ingredients=recipe_ingredients)
     
@@ -60,3 +73,25 @@ class IngredientsTable():
 
             none: list[RecipesUsingIngredient] = []
             return RecipesFromIngredients(recipe_ingredients=none)
+        
+    def get_all_ingredients(self) -> IngredientList:
+        try:
+            response: APIResponse = (
+                self.ingredients_table
+                .select("name")
+                .execute()
+            )
+
+            data: list[dict] = response.data
+
+            ingredients_list: list[Ingredient] = list(map(to_ingredient, data))
+
+            ingredients_list.sort(key=sort_by_name)
+
+            return IngredientList(all_ingredients=ingredients_list)
+        
+        except APIError as err:
+            print(err)
+
+            none: list[Ingredient] = []
+            return IngredientList(all_ingredients=none)

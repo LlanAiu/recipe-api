@@ -77,3 +77,9 @@ class RecipesUsingIngredient(BaseModel):
 
 class RecipesFromIngredients(BaseModel):
     recipe_ingredients: list[RecipesUsingIngredient]
+
+class Ingredient(BaseModel):
+    name: str
+
+class IngredientList(BaseModel):
+    all_ingredients: list[Ingredient]
