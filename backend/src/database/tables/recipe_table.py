@@ -22,15 +22,16 @@ class RecipeTable():
             response: APIResponse = self.recipe_table.select("*").eq("id", recipe_id).execute()
             
             if(len(response.data) != 1):
-                return RecipeData(name="", ingredients="", directions="")
+                return RecipeData(id=recipe_id, name="", ingredients="", directions="")
 
             data: dict = response.data[0]
             
+            id: int = data.get(RecipeAttribute.ID.value)
             name_data: str = data.get(RecipeAttribute.NAME.value)
             ingredients_data: str = data.get(RecipeAttribute.INGREDIENTS.value)
             directions_data: str = data.get(RecipeAttribute.DIRECTIONS.value)
 
-            return RecipeData(id=recipe_id,name=name_data, ingredients=ingredients_data, directions=directions_data)
+            return RecipeData(id=id,name=name_data, ingredients=ingredients_data, directions=directions_data)
         
         except APIError as err:
             print(err)

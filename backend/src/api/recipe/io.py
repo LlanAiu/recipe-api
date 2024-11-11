@@ -10,6 +10,7 @@ class BuildRecipeInput(BaseModel):
     ingredients: list[str]
 
 class RecipeInformationOutput(BaseModel):
+    id: int
     recipe_name: str
     ingredient_amounts: list[str]
     directions: list[str]

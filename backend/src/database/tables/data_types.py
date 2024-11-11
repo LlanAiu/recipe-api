@@ -19,6 +19,7 @@ class RecipesFromIngredientsParams(BaseModel):
 
 
 class RecipeAttribute(Enum):
+    ID = "id"
     NAME = "name"
     INGREDIENTS = "ingredient_amounts"
     DIRECTIONS = "directions"

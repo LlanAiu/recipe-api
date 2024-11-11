@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { RecipeData } from './types';
+import { RecipeData, ServerRecipeData } from './types';
 
 
 const BACKEND_URL_DEV: string | undefined = process.env.BACKEND_DEV_URL;
@@ -93,7 +93,17 @@ export default class RecipeClient {
             return [];
         }
 
-        const recipes: RecipeData[] = response.data["possible_recipes"] as RecipeData[];
+        const data: ServerRecipeData[] = response.data["possible_recipes"] as ServerRecipeData[];
+
+        const recipes: RecipeData[] = data.map((recipe: ServerRecipeData) => {
+            const asRecipe: RecipeData = {
+                id: recipe.id,
+                name: recipe.recipe_name,
+                ingredients: recipe.ingredient_amounts,
+                directions: recipe.directions
+            };   
+            return asRecipe;
+        })
 
         if(recipes.length === 0){
             return [];

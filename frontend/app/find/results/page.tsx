@@ -1,19 +1,40 @@
-
+import { redirect } from 'next/navigation';
 import { RecipeData } from '../../data/types';
+import RecipeClient from '@/app/data/recipe-client';
+import RecipeCard from './recipe-card';
 
-export default function ResultsPage() {
-    const recipes: RecipeData[] = [];
+async function postIngredients(ingredients: string[]): Promise<RecipeData[]> {
+    const instance: RecipeClient = RecipeClient.getInstance();
 
-    
+    return await instance.getPossibleRecipes(ingredients);
+}
+
+export default async function ResultsPage({ searchParams }: {
+    searchParams?: {
+        ingredients: string
+    }
+}) {
+
+    const params = await searchParams;
+
+    if (!params?.ingredients) {
+        redirect("../find");
+    }
+
+    const ingredientsList: string[] = params.ingredients.split("/");
+
+    console.log(ingredientsList);
+
+    const recipes: RecipeData[] = await postIngredients(ingredientsList);
+
+    console.log(recipes);
 
     return (
-        <div>
+        <>
             <h1>Recipe Results</h1>
-            <ul>
-                {recipes.map((recipe) => (
-                    <li key={recipe.id}>{recipe.name}</li>
-                ))}
-            </ul>
-        </div>
+            {recipes.map((recipe: RecipeData, index: number) => {
+                return (<RecipeCard key={index} recipe={recipe} />)
+            })}
+        </>
     );
 }

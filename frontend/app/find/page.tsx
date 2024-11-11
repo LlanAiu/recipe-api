@@ -1,21 +1,12 @@
 
-import RecipeClient from '../data/recipe-client';
-import { RecipeData } from '../data/types';
 import RecipeSearch from './recipe-search';
+import { redirect } from 'next/navigation';
 
 async function fetchIngredients(): Promise<string[]> {
-    return ['beef', 'butter', 'nuts', 'cream of mushroom soup', 'chicken breasts', 'sour cream', 'more things'];
-}
-
-
-async function postIngredients(ingredients: string[]): Promise<RecipeData[]>{
-    const instance: RecipeClient = RecipeClient.getInstance();
-    
-    return await instance.getPossibleRecipes(ingredients);
+    return ['beef', 'butter', 'nuts', 'cream of mushroom soup', 'chicken breasts', 'sour cream', 'bite size shredded rice biscuits', 'brown sugar', 'milk', 'vanilla'];
 }
 
 export default async function Page(){
-    
     const allIngredients: string[] = await fetchIngredients();
 
     async function handleSubmit(formData: FormData){
@@ -26,11 +17,7 @@ export default async function Page(){
             throw new TypeError("No Ingredient Data Found in Form");
         }
 
-        const ingredients: string[] = data.split("/");
-
-        const recipes: RecipeData[] = await postIngredients(ingredients);
-
-        //Not really sure what to do with recipes here tbh...
+        redirect(`/find/results?ingredients=${data}`);
     }
 
     return (

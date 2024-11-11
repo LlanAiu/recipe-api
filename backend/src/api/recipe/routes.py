@@ -21,24 +21,26 @@ def get_recipe_information(recipe_id: int, request: Request) -> RecipeInformatio
         params: RetrieveRecipeParams = RetrieveRecipeParams(id=recipe_id)
         data: RecipeData = supabase_client.recipes_table.retrieve_recipe(params=params)
 
+        id: int = data.id
         recipe_name: str = data.get_name()
         ingredients_list: list[str] = data.get_ingredients_list()
         directions: list[str] = data.get_directions_list()
     
-        return RecipeInformationOutput(recipe_name=recipe_name, ingredient_amounts=ingredients_list, directions=directions)
+        return RecipeInformationOutput(id=id, recipe_name=recipe_name, ingredient_amounts=ingredients_list, directions=directions)
     
     except AttributeError as err:
         print(err)
         
-        return RecipeInformationOutput(recipe_name="", ingredient_amounts=[], directions=[])
+        return RecipeInformationOutput(id=-1, recipe_name="", ingredient_amounts=[], directions=[])
 
 
 def recipe_data_to_output(data: RecipeData) -> RecipeInformationOutput:
+    id: int = data.id;
     name: str = data.get_name()
     ingredients: list[str] = data.get_ingredients_list()
     directions: list[str] = data.get_directions_list()
     
-    return RecipeInformationOutput(recipe_name=name, ingredient_amounts=ingredients, directions=directions)
+    return RecipeInformationOutput(id=id, recipe_name=name, ingredient_amounts=ingredients, directions=directions)
 
 @recipe_router.post("/find")
 def build_recipe_from_ingredients(inputs: BuildRecipeInput, request: Request) -> BuildRecipeOutput:
@@ -50,7 +52,7 @@ def build_recipe_from_ingredients(inputs: BuildRecipeInput, request: Request) ->
     possible_recipes: list[RecipeData] = recipe_finder.retrieve_recipes_from_ingredients(params=params)
 
     if(len(possible_recipes) == 0):
-        none: RecipeInformationOutput = RecipeInformationOutput(recipe_name="None", ingredient_amounts=[], directions=[])
+        none: RecipeInformationOutput = RecipeInformationOutput(id=-1, recipe_name="None", ingredient_amounts=[], directions=[])
         return BuildRecipeOutput(possible_recipes=[none])
 
     recipe_output: list[RecipeInformationOutput] = map(recipe_data_to_output, possible_recipes)
