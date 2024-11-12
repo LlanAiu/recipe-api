@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "What to Cook?",
-  description: "An app that eliminates (part of) the decision fatigue associated with making dinner",
+  title: "Let You Cook",
+  description: "A web application that eliminates (part of) the decision fatigue associated with making dinner (hopefully)",
 };
 
 export default function RootLayout({
