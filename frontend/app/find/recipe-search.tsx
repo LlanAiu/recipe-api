@@ -11,7 +11,7 @@ function truncateArray(arr: string[]): string[] {
     return arr.slice(0, maxIndex);
 }
 
-export default function RecipeSearch({ ingredientsList } : { ingredientsList: string[] }) {
+export default function RecipeSearch({ ingredientsList }: { ingredientsList: string[] }) {
 
     const [ingredients, setIngredients] = useState<string[]>([]);
     const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
@@ -44,7 +44,6 @@ export default function RecipeSearch({ ingredientsList } : { ingredientsList: st
                 setIngredients(s => truncated);
             } else {
                 const all: string[] = truncateArray(allIngredients);
-                console.log(all.length);
                 setIngredients(s => all);
             }
         } else {
@@ -62,34 +61,58 @@ export default function RecipeSearch({ ingredientsList } : { ingredientsList: st
     }
 
     return (
-        <div ref={inputRef}>
-            <input
-                type="text"
-                onChange={e => handleSearch(e.target.value)}
-                onFocus={e => handleFocus("FOCUS", e.target.value)}
-                placeholder="Search for ingredients"
-            />
-            <input
-                type='hidden'
-                name='ingredients'
-                value={selectedIngredients.join("/")}
-            />
-            {ingredients.map((ingredient, index) => (
-                <IngredientSearchResult
-                    key={index}
-                    ingredient={ingredient}
-                    addIngredient={addIngredient}
-                    removeIngredient={removeIngredient}
-                    initialCheck={selectedIngredients.includes(ingredient)}
-                />
-            ))}
+        <div>
+            <h1 className='text-2xl pt-6 pl-4 text-gray-800'><b>Select Ingredients</b></h1>
             <div>
-                <h3>Selected Ingredients:</h3>
-                <ul>
-                    {selectedIngredients.map((ingredient, index) => (
-                        <li key={index}>{ingredient}</li>
+                <div className='p-4'>
+                    <textarea
+                        className='w-full border rounded-md p-2'
+                        rows={2}
+                        value={selectedIngredients.length === 0 ? 'No Ingredients Selected' : selectedIngredients.join(", ")}
+                        readOnly
+                    />
+                </div>
+                <div className='w-full inline-block'>
+                    <div ref={inputRef} className='w-4/5 inline-block px-2'>
+                        <input
+                            type="text"
+                            className='py-1.5 px-2 w-full rounded-md bg-slate-100'
+                            onChange={e => handleSearch(e.target.value)}
+                            onFocus={e => handleFocus("FOCUS", e.target.value)}
+                            placeholder="Search for ingredients..."
+                        />
+                        <input
+                            type='hidden'
+                            name='ingredients'
+                            value={selectedIngredients.join("/")}
+                        />
+                        {ingredients.map((ingredient, index) => (
+                            <IngredientSearchResult
+                                key={index}
+                                ingredient={ingredient}
+                                addIngredient={addIngredient}
+                                removeIngredient={removeIngredient}
+                                initialCheck={selectedIngredients.includes(ingredient)}
+                            />
+                        ))}
+                    </div>
+
+                    <div className='w-1/5 inline-block text-center align-top'>
+                        <button className='mx-4 py-1.5 px-3 border rounded-md bg-slate-100 hover:bg-blue-100' type='submit'>Search</button>
+                    </div>
+                </div>
+                {/* <div className='px-2 w-4/5'>
+                    {ingredients.map((ingredient, index) => (
+                        <IngredientSearchResult
+                            key={index}
+                            ingredient={ingredient}
+                            addIngredient={addIngredient}
+                            removeIngredient={removeIngredient}
+                            initialCheck={selectedIngredients.includes(ingredient)}
+                        />
                     ))}
-                </ul>
+                </div> */}
+
             </div>
         </div>
     );

@@ -27,8 +27,6 @@ export default async function Page(){
         <div>
             <form action={handleSubmit}>
                 <RecipeSearch ingredientsList={allIngredients}/>
-
-                <button type='submit'>Search</button>
             </form>
         </div>
     );
