@@ -1,15 +1,7 @@
 import { redirect } from 'next/navigation';
 import { RecipeData } from '../../data/types';
-import RecipeClient from '@/app/data/recipe-client';
 import RecipeCard from './recipe-card';
-
-async function postIngredients(ingredients: string[]): Promise<RecipeData[]> {
-    console.log("Posting ingredients: " + ingredients);
-
-    const recipeClient: RecipeClient = RecipeClient.getInstance();
-
-    return await recipeClient.getPossibleRecipes(ingredients);
-}
+import { getPossibleRecipes } from '@/app/data/api-client';
 
 export default async function ResultsPage({ searchParams }: {
     searchParams?: Promise<{
@@ -29,7 +21,7 @@ export default async function ResultsPage({ searchParams }: {
 
     ingredientsList.sort();
 
-    const recipes: RecipeData[] = await postIngredients(ingredientsList);
+    const recipes: RecipeData[] = await getPossibleRecipes(ingredientsList);
 
 
     // Test data for CSS bc hela long reload time otherwise

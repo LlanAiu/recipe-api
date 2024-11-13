@@ -1,15 +1,6 @@
 import { getRecipeData } from '@/app/data/api-client';
-import RecipeClient from '@/app/data/recipe-client';
 import { RecipeData } from '@/app/data/types';
 import Link from 'next/link';
-
-
-// async function getRecipeData(id: number): Promise<RecipeData> {
-
-//     const instance: RecipeClient = RecipeClient.getInstance();
-
-//     return await instance.getRecipeData(id);
-// }
 
 
 export default async function RecipeInformation({ params, searchParams }: { 

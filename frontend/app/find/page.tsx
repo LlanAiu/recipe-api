@@ -1,16 +1,11 @@
 
-import RecipeClient from '../data/recipe-client';
+import { getAllIngredients } from '../data/api-client';
 import RecipeSearch from './recipe-search';
 import { redirect } from 'next/navigation';
 
-async function fetchIngredients(): Promise<string[]> {
-    const recipeClient: RecipeClient = RecipeClient.getInstance();
-
-    return recipeClient.getAllIngredients();
-}
 
 export default async function Page(){
-    const allIngredients: string[] = await fetchIngredients();
+    const allIngredients: string[] = await getAllIngredients();
 
     async function handleSubmit(formData: FormData){
         'use server'

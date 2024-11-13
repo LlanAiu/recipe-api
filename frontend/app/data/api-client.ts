@@ -54,6 +54,8 @@ export async function getRecipeData(id: number): Promise<RecipeData> {
 }
 
 export async function getPossibleRecipes(ingredients: string[]): Promise<RecipeData[]> {
+    checkValidEnvironment();
+
     const requestData = JSON.stringify({
         ingredients: ingredients
     });
@@ -67,9 +69,9 @@ export async function getPossibleRecipes(ingredients: string[]): Promise<RecipeD
 
     const data = await response.json();
 
-    // const data: ServerRecipeData[] = response.data["possible_recipes"] as ServerRecipeData[];
+    const recipeData: ServerRecipeData[] = data["possible_recipes"] as ServerRecipeData[];
 
-    const recipes: RecipeData[] = data.map((recipe: ServerRecipeData) => {
+    const recipes: RecipeData[] = recipeData.map((recipe: ServerRecipeData) => {
         const asRecipe: RecipeData = {
             id: recipe.id,
             name: recipe.recipe_name,
@@ -87,21 +89,19 @@ export async function getPossibleRecipes(ingredients: string[]): Promise<RecipeD
 }
 
 export async function getAllIngredients(): Promise<string[]> {
-    const response: CacheAxiosResponse | undefined = await this.client
-        .get("/ingredient/all")
-        .catch((error) => {
-            console.log("Failed to fetch ingredients");
-            console.log(error);
-            return undefined;
-        });
+    checkValidEnvironment();
 
-    if (!response) {
+    const response: Response = await fetch(`${BACKEND_URL}/ingredient/all`, CACHE_RESULTS);
+
+    const data = await response.json();
+
+    if (!data) {
         return [];
     }
 
-    const data: ServerIngredientData[] = response.data["ingredients_list"] as ServerIngredientData[];
+    const ingredientData: ServerIngredientData[] = data["ingredients_list"] as ServerIngredientData[];
 
-    const ingredients: string[] = data.map((ingredient: ServerIngredientData) => ingredient.name);
+    const ingredients: string[] = ingredientData.map((ingredient: ServerIngredientData) => ingredient.name);
 
     return ingredients;
 }
