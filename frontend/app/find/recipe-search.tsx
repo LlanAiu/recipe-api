@@ -101,18 +101,6 @@ export default function RecipeSearch({ ingredientsList }: { ingredientsList: str
                         <button className='mx-4 py-1.5 px-3 border rounded-md bg-slate-100 hover:bg-blue-100' type='submit'>Search</button>
                     </div>
                 </div>
-                {/* <div className='px-2 w-4/5'>
-                    {ingredients.map((ingredient, index) => (
-                        <IngredientSearchResult
-                            key={index}
-                            ingredient={ingredient}
-                            addIngredient={addIngredient}
-                            removeIngredient={removeIngredient}
-                            initialCheck={selectedIngredients.includes(ingredient)}
-                        />
-                    ))}
-                </div> */}
-
             </div>
         </div>
     );

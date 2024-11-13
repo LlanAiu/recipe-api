@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { RecipeData, ServerIngredientData, ServerRecipeData } from './types';
+import { AxiosCacheInstance, CacheAxiosResponse, setupCache } from 'axios-cache-interceptor/dev';
 
 
 const BACKEND_URL_DEV: string | undefined = process.env.BACKEND_DEV_URL;
@@ -21,7 +22,7 @@ class InvalidEnvironmentError extends Error{
 export default class RecipeClient {
     private static instance: RecipeClient;
 
-    private client: AxiosInstance;
+    private client: AxiosCacheInstance;
 
     public static getInstance(): RecipeClient {
         if(!RecipeClient.instance){
@@ -35,9 +36,14 @@ export default class RecipeClient {
             throw new InvalidEnvironmentError("Deployed Backend URL Not Found in Environment!");
         }
 
-        this.client = axios.create({
+        const axiosInstance: AxiosInstance = axios.create({
             baseURL: BACKEND_URL,
             timeout: 50000,
+        });
+
+        this.client = setupCache(axiosInstance, {
+            methods: ["get", "post"],
+            debug: console.log
         });
     }
 
@@ -78,20 +84,26 @@ export default class RecipeClient {
         }
     }
 
-    public async getPossibleRecipes(ingredients: string[]): Promise<RecipeData[]>{
-        const response: AxiosResponse | undefined = await this.client
-            .post("/recipe/find", {
-                ingredients: ingredients
-            })
+    public async getPossibleRecipes(ingredients: string[]): Promise<RecipeData[]> {
+        const requestData = {
+            ingredients: ingredients
+        };
+
+        console.log(this.client.storage);
+
+        const response: CacheAxiosResponse | undefined = await this.client
+            .post("/recipe/find", requestData)
             .catch((error) => {
                 console.log("Failed to fetch possible recipes");
-                console.log(error)
+                console.log(error);
                 return undefined;
             });
 
-        if(!response){
+        if (!response) {
             return [];
         }
+
+        console.log(this.client.storage);
 
         const data: ServerRecipeData[] = response.data["possible_recipes"] as ServerRecipeData[];
 
@@ -101,11 +113,11 @@ export default class RecipeClient {
                 name: recipe.recipe_name,
                 ingredients: recipe.ingredient_amounts,
                 directions: recipe.directions
-            };   
+            };
             return asRecipe;
-        })
+        });
 
-        if(recipes.length === 0){
+        if (recipes.length === 0) {
             return [];
         } else {
             return recipes;
@@ -113,7 +125,7 @@ export default class RecipeClient {
     }
 
     public async getAllIngredients(): Promise<string[]> {
-        const response: AxiosResponse | undefined = await this.client
+        const response: CacheAxiosResponse | undefined = await this.client
             .get("/ingredient/all")
             .catch((error) => {
                 console.log("Failed to fetch ingredients");

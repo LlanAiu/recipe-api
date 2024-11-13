@@ -4,6 +4,8 @@ import RecipeClient from '@/app/data/recipe-client';
 import RecipeCard from './recipe-card';
 
 async function postIngredients(ingredients: string[]): Promise<RecipeData[]> {
+    console.log("Posting ingredients: " + ingredients);
+
     const recipeClient: RecipeClient = RecipeClient.getInstance();
 
     return await recipeClient.getPossibleRecipes(ingredients);
@@ -21,7 +23,11 @@ export default async function ResultsPage({ searchParams }: {
         redirect("../find");
     }
 
+    const dataString: string = params.ingredients;
+
     const ingredientsList: string[] = params.ingredients.split("/");
+
+    ingredientsList.sort();
 
     const recipes: RecipeData[] = await postIngredients(ingredientsList);
 
@@ -49,7 +55,7 @@ export default async function ResultsPage({ searchParams }: {
         <div className='p-6'>
             <h1 className='text-2xl text-gray-800 mb-5'><b>Recipe Results</b></h1>
             {recipes.map((recipe: RecipeData, index: number) => {
-                return (<RecipeCard key={index} recipe={recipe} />)
+                return (<RecipeCard key={index} recipe={recipe} urlQuery={dataString}/>)
             })}
         </div>
     );

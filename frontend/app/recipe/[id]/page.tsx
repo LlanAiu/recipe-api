@@ -1,17 +1,25 @@
+import { getRecipeData } from '@/app/data/api-client';
 import RecipeClient from '@/app/data/recipe-client';
 import { RecipeData } from '@/app/data/types';
+import Link from 'next/link';
 
 
-async function getRecipeData(id: number): Promise<RecipeData> {
+// async function getRecipeData(id: number): Promise<RecipeData> {
 
-    const instance: RecipeClient = RecipeClient.getInstance();
+//     const instance: RecipeClient = RecipeClient.getInstance();
 
-    return await instance.getRecipeData(id);
-}
+//     return await instance.getRecipeData(id);
+// }
 
 
-export default async function RecipeInformation({ params }: { params: Promise<{ id: number }> }) {
-    const id = (await params).id;
+export default async function RecipeInformation({ params, searchParams }: { 
+    params: Promise<{ id: number }>,
+    searchParams?: Promise<{ query: string }>
+}) {
+
+    const search: string | undefined = (await searchParams)?.query;
+
+    const id: number = (await params).id;
 
     const recipeData: RecipeData = await getRecipeData(id);
 
@@ -36,6 +44,14 @@ export default async function RecipeInformation({ params }: { params: Promise<{ 
                     </ol>
                 </div>
             </div>
+            {search && 
+            
+            <div>
+                <Link href={`/find/results?ingredients=${search}`}>
+                    <p>Back</p>
+                </Link>
+            </div>
+            }
 
         </div>
     );
