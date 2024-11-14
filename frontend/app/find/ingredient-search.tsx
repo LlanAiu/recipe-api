@@ -4,7 +4,7 @@ export default function IngredientSearchResult({ingredient, addIngredient, remov
     ingredient: string,
     addIngredient: (ingredient: string) => void,
     removeIngredient: (ingredient: string) => void
-    initialCheck: boolean
+    initialCheck: boolean,
 }) {
 
     let checked = initialCheck;

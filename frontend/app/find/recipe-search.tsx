@@ -3,6 +3,9 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import IngredientSearchResult from './ingredient-search';
+import Image from 'next/image';
+import IngredientPill from './ingredient-pill';
+import { AnimatePresence, motion, Variants } from 'motion/react';
 
 const MAX_SEARCH_RESULTS: number = 10;
 
@@ -19,6 +22,25 @@ export default function RecipeSearch({ ingredientsList }: { ingredientsList: str
 
     const inputRef = useRef(null);
     useOutsideAlerter(inputRef, () => handleFocus("BLUR", undefined));
+
+    const [animationState, setAnimationState] = useState<"search" | "hidden">('hidden');
+
+    const variants: Variants = {
+        search: (index: number) => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: 0.03 * index
+            }
+        }),
+        hidden: (index: number) => ({
+            opacity: 0,
+            y: -10,
+            transition: {
+                delay: 0.05 * index
+            }
+        })
+    }
 
     const handleSearch = useDebouncedCallback((search: string) => {
         if (search) {
@@ -46,8 +68,10 @@ export default function RecipeSearch({ ingredientsList }: { ingredientsList: str
                 const all: string[] = truncateArray(allIngredients);
                 setIngredients(s => all);
             }
+            setAnimationState("search");
         } else {
             setIngredients(s => []);
+            setAnimationState("hidden");
         }
     }
 
@@ -61,22 +85,24 @@ export default function RecipeSearch({ ingredientsList }: { ingredientsList: str
     }
 
     return (
-        <div>
-            <h1 className='text-2xl pt-6 pl-4 text-gray-800'><b>Select Ingredients</b></h1>
-            <div>
-                <div className='p-4'>
-                    <textarea
-                        className='w-full border rounded-md p-2'
-                        rows={2}
-                        value={selectedIngredients.length === 0 ? 'No Ingredients Selected' : selectedIngredients.join(", ")}
-                        readOnly
-                    />
+        <div className='pt-10 w-full'>
+            <h1 className='text-2xl pt-6 pl-4 text-gray-800 w-full text-center'><b>Select Ingredients</b></h1>
+            <div className='w-3/5 m-auto space-y-3 mt-3'>
+                <div className='py-4 px-4 h-max'>
+                    <div className='border rounded-md min-h-24 p-1'>
+                        {selectedIngredients.length == 0 && (
+                            <p className='p-2 text-sm text-gray-400'>No ingredients added</p>
+                        )}
+                        {selectedIngredients.map((ingredient: string, index: number) => (
+                            <IngredientPill key={index} ingredient={ingredient} onClick={removeIngredient} />
+                        ))}
+                    </div>
                 </div>
-                <div className='w-full inline-block'>
-                    <div ref={inputRef} className='w-4/5 inline-block px-4'>
+                <div className='w-full flex flex-row'>
+                    <div ref={inputRef} className='w-4/5 flex-auto px-4'>
                         <input
                             type="text"
-                            className='py-1.5 px-2 w-full rounded-md bg-slate-100'
+                            className='py-1.5 px-2 h-10 w-full rounded-md bg-slate-100'
                             onChange={e => handleSearch(e.target.value)}
                             onFocus={e => handleFocus("FOCUS", e.target.value)}
                             placeholder="Search for ingredients..."
@@ -86,19 +112,40 @@ export default function RecipeSearch({ ingredientsList }: { ingredientsList: str
                             name='ingredients'
                             value={selectedIngredients.join("/")}
                         />
-                        {ingredients.map((ingredient, index) => (
-                            <IngredientSearchResult
-                                key={index}
-                                ingredient={ingredient}
-                                addIngredient={addIngredient}
-                                removeIngredient={removeIngredient}
-                                initialCheck={selectedIngredients.includes(ingredient)}
-                            />
-                        ))}
+                        <motion.div
+                            variants={variants}
+                            animate={animationState}
+                        >
+                            <AnimatePresence>
+                                {ingredients.map((ingredient, index) => (
+                                    <motion.div
+                                        variants={variants}
+                                        initial='hidden'
+                                        custom={index}
+                                        exit='hidden'
+                                    >
+                                        <IngredientSearchResult
+                                            key={index}
+                                            ingredient={ingredient}
+                                            addIngredient={addIngredient}
+                                            removeIngredient={removeIngredient}
+                                            initialCheck={selectedIngredients.includes(ingredient)} 
+                                        />
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
+                        </motion.div>
                     </div>
 
-                    <div className='w-1/5 inline-block text-center align-top'>
-                        <button className='mx-4 py-1.5 px-3 border rounded-md bg-slate-100 hover:bg-blue-100' type='submit'>Search</button>
+                    <div className='w-max flex-initial text-center align-top'>
+                        <button className='ml-2 mr-4 py-1.5 px-3 h-10 border rounded-md bg-slate-100 hover:bg-blue-100' type='submit'>
+                            <Image
+                                src={'/search-icon.png'}
+                                alt='Search Icon'
+                                width={20}
+                                height={20}
+                            />
+                        </button>
                     </div>
                 </div>
             </div>
