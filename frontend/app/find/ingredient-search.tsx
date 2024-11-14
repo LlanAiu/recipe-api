@@ -1,7 +1,5 @@
 
 
-import { useReducer, useState } from 'react';
-
 export default function IngredientSearchResult({ingredient, addIngredient, removeIngredient, initialCheck} : {
     ingredient: string,
     addIngredient: (ingredient: string) => void,

@@ -73,7 +73,7 @@ export default function RecipeSearch({ ingredientsList }: { ingredientsList: str
                     />
                 </div>
                 <div className='w-full inline-block'>
-                    <div ref={inputRef} className='w-4/5 inline-block px-2'>
+                    <div ref={inputRef} className='w-4/5 inline-block px-4'>
                         <input
                             type="text"
                             className='py-1.5 px-2 w-full rounded-md bg-slate-100'

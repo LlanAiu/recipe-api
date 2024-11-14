@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { RecipeData } from '../../data/types';
 import RecipeCard from './recipe-card';
 import { getPossibleRecipes } from '@/app/data/api-client';
+import Link from 'next/link';
 
 export default async function ResultsPage({ searchParams }: {
     searchParams?: Promise<{
@@ -45,7 +46,15 @@ export default async function ResultsPage({ searchParams }: {
 
     return (
         <div className='p-6'>
-            <h1 className='text-2xl text-gray-800 mb-5'><b>Recipe Results</b></h1>
+            <div className='mb-5 inline-block w-full'>
+                <h1 className='text-2xl text-gray-800 inline-block'><b>Recipe Results</b></h1>
+                <div className='inline-block float-right mr-5 border rounded-md bg-slate-100 hover:bg-slate-300'>
+                    <Link href={`/find`}>
+                        <p className='p-2'>Back to Search</p>
+                    </Link>
+                </div>
+            </div>
+            
             {recipes.map((recipe: RecipeData, index: number) => {
                 return (<RecipeCard key={index} recipe={recipe} urlQuery={dataString}/>)
             })}
