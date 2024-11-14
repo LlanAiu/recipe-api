@@ -20,7 +20,7 @@ body {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans';
 }
 
-@variants hover {
+@layer utilities {
   .primary {
     color: #D62828;
   }
@@ -56,7 +56,7 @@ body {
   }
 
   .dark-tertiary-bg {
-    background-color: ##fbb429;
+    background-color: #fbb429;
   }
   
   .quaternary-bg{
