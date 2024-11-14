@@ -81,7 +81,7 @@ export async function getPossibleRecipes(ingredients: string[]): Promise<RecipeD
         return asRecipe;
     });
 
-    if (recipes.length === 0) {
+    if (recipes.length === 1 && recipes[0].id === -1) {
         return [];
     } else {
         return recipes;

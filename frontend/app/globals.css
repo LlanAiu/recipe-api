@@ -3,19 +3,71 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FBF9EF;
+  --foreground: #003049;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #003049;
   }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans';
+}
+
+@variants hover {
+  .primary {
+    color: #D62828;
+  }
+  
+  .secondary {
+    color: #F77F00;
+  }
+  
+  .tertiary{
+    color: #FCBF49;
+  }
+  
+  .primary-bg {
+    background-color: #D62828;
+    color: #FBF9EF;
+  }
+
+  .dark-primary-bg {
+    background-color: #b62222;
+    color: #FBF9EF;
+  }
+  
+  .secondary-bg {
+    background-color: #F77F00;
+  }
+
+  .dark-secondary-bg {
+    background-color: #de7200;
+  }
+  
+  .tertiary-bg {
+    background-color: #FCBF49;
+  }
+
+  .dark-tertiary-bg {
+    background-color: ##fbb429;
+  }
+  
+  .quaternary-bg{
+    background-color: #ECE5BE;
+  }
+
+  .dark-quaternary-bg{
+    background-color: #ded18d;
+  }
+
+  .light-quaternary-bg{
+    background-color: #F6F2DF;
+  }
 }

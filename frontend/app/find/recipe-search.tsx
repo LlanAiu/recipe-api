@@ -86,15 +86,15 @@ export default function RecipeSearch({ ingredientsList }: { ingredientsList: str
 
     return (
         <div className='pt-10 w-full'>
-            <h1 className='text-2xl pt-6 pl-4 text-gray-800 w-full text-center'><b>Select Ingredients</b></h1>
+            <h1 className='text-2xl pt-6 pl-4 w-full text-center'><b>Select Ingredients</b></h1>
             <div className='w-3/5 m-auto space-y-3 mt-3'>
                 <div className='py-4 px-4 h-max'>
-                    <div className='border rounded-md min-h-24 p-1'>
+                    <div className='border rounded-lg min-h-24 p-1 light-quaternary-bg'>
                         {selectedIngredients.length == 0 && (
-                            <p className='p-2 text-sm text-gray-400'>No ingredients added</p>
+                            <p className='p-2 text-sm text-gray-500'>No ingredients added</p>
                         )}
                         {selectedIngredients.map((ingredient: string, index: number) => (
-                            <IngredientPill key={index} ingredient={ingredient} onClick={removeIngredient} />
+                            <IngredientPill key={index} ingredient={ingredient} index={index} onClick={removeIngredient} />
                         ))}
                     </div>
                 </div>
@@ -102,7 +102,7 @@ export default function RecipeSearch({ ingredientsList }: { ingredientsList: str
                     <div ref={inputRef} className='w-4/5 flex-auto px-4'>
                         <input
                             type="text"
-                            className='py-1.5 px-2 h-10 w-full rounded-md bg-slate-100'
+                            className='py-1.5 px-2 h-10 w-full rounded-md quaternary-bg placeholder-slate-500'
                             onChange={e => handleSearch(e.target.value)}
                             onFocus={e => handleFocus("FOCUS", e.target.value)}
                             placeholder="Search for ingredients..."
@@ -138,7 +138,7 @@ export default function RecipeSearch({ ingredientsList }: { ingredientsList: str
                     </div>
 
                     <div className='w-max flex-initial text-center align-top'>
-                        <button className='ml-2 mr-4 py-1.5 px-3 h-10 border rounded-md bg-slate-100 hover:bg-blue-100' type='submit'>
+                        <button className='ml-2 mr-4 py-1.5 px-3 h-10 border rounded-md bg-blue-100 hover:bg-blue-300' type='submit'>
                             <Image
                                 src={'/search-icon.png'}
                                 alt='Search Icon'

@@ -28,15 +28,11 @@ export default async function ResultsPage({ searchParams }: {
         <div className='p-6'>
             <div className='mt-10 w-full space-y-3 mb-10'>
                 <h1 className='text-2xl text-gray-800 text-center'><b>Recipe Search Results</b></h1>
-                {/* <div className='border rounded-md bg-slate-100 hover:bg-slate-300 w-max m-auto'>
-                    <Link href={`/find`}>
-                        <p className='p-2 text-center text-sm w-max'>Back to Search</p>
-                    </Link>
-                </div> */}
             </div>
             <div className='w-3/5 m-auto'>
+                {recipes.length === 0 && <p className='text-center text-gray-500'>No recipes found with these ingredients</p>}
                 {recipes.map((recipe: RecipeData, index: number) => {
-                    return (<RecipeCard key={index} recipe={recipe} urlQuery={dataString}/>)
+                    return (<RecipeCard key={index} recipe={recipe} index={index} urlQuery={dataString}/>)
                 })}
             </div>
         </div>

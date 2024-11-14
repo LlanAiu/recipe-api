@@ -3,9 +3,9 @@ import NavBar from '../components/nav-bar';
 
 export default function Layout({children} : {children: React.ReactNode}){
     return (
-        <div className=''>
-            <NavBar />
-            <div className=''>
+        <div>
+            
+            <div>
                 {children}
             </div>
         </div>

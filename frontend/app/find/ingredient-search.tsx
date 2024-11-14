@@ -19,7 +19,7 @@ export default function IngredientSearchResult({ingredient, addIngredient, remov
     }
     
     return (
-        <div className='bg-slate-50 hover:bg-slate-300 pl-2 h-max rounded-sm'>
+        <div className='light-quaternary-bg hover:quaternary-bg pl-2 h-max rounded-sm'>
             <button type='button' className='w-full text-left pl-2 py-1' onClick={handleCheck}>
                 {checked ? <p>✓ {ingredient}</p> : <p>+ {ingredient}</p>}
             </button>

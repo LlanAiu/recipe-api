@@ -1,27 +1,45 @@
+'use client'
+
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
 
 
 export default function NavBar(){
+    const pathname: string = usePathname();
+
     return (
-        <div className='bg-blue-200 h-12 w-full space-x-9 pl-5'>
-            <div className='h-full inline-block align-middle pt-1.5'>
+        <div className='h-16 w-full space-x-12 pl-6 content-center border-b-2 border-gray-300'>
+            <div className='inline-block align-middle'>
                 <Image
                     src='/logo.png'
                     alt='logo'
-                    width={51}
-                    height={35}
+                    width={61}
+                    height={42}
                 />
             </div>
-            <div className='h-full inline-block'>
-                <Link href='/'>
-                    <p className=''>Home</p>
-                </Link>
+            <div className='inline-block h-max'>
+                <div className={clsx({
+                    'py-1 px-1.5 rounded-xl hover:quaternary-bg': true,
+                    'quaternary-bg': pathname === '/',
+                })}>
+                    <Link href='/'>
+                        <p className='w-max'><b>Home</b></p>
+                    </Link>
+                </div>
             </div>
-            <div className='h-full inline-block'>
-                <Link href='/find'>
-                    <p className=''>Search</p>
-                </Link>
+            <div className='inline-block'>
+                <div className={
+                    clsx({
+                        'py-1 px-1.5 rounded-xl hover:quaternary-bg': true,
+                        'quaternary-bg': pathname === '/find',
+                    })
+                }>
+                    <Link href='/find'>
+                        <p className='w-max'><b>Search</b></p>
+                    </Link>
+                </div>
             </div>
         </div>
     );
