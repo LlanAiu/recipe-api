@@ -9,13 +9,17 @@ export default async function Page(){
 
     async function handleSubmit(formData: FormData){
         'use server'
+        try {
+            const data: string | undefined = formData.get("ingredients")?.toString();
 
-        const data: string | undefined = formData.get("ingredients")?.toString();
-        if(!data){
-            throw new TypeError("No Ingredient Data Found in Form");
+            if(!data){
+                throw new TypeError("No Ingredient Data Found in Form");
+            }
+
+            redirect(`/find/results?ingredients=${data}`);
+        } catch (error){
+            console.error(error);
         }
-
-        redirect(`/find/results?ingredients=${data}`);
     }
 
     return (

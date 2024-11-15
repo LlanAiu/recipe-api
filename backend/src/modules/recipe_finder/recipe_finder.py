@@ -15,12 +15,16 @@ from src.database import (
 )
 
 
-def count_ingredient(recipe_counts: AllRecipeCounts, recipe_ingredients: RecipesUsingIngredient):
-    recipe_ids: list[int] = recipe_ingredients.recipes
+def count_ingredient(counts: dict[int, int], recipe_ingredients: RecipesUsingIngredient) -> dict[int, int]:
+    recipe_ids: list[int] = recipe_ingredients.recipes  
+    recipe_counts: dict[int, int] = counts.copy()
+
     for recipe_id in recipe_ids:
         if recipe_id not in recipe_counts:
             recipe_counts[recipe_id] = 0
         recipe_counts[recipe_id] += 1
+
+    return recipe_counts
 
 
 def generate_recipe_ingredient_counts(data: RecipesFromIngredients) -> AllRecipeCounts:
@@ -29,7 +33,7 @@ def generate_recipe_ingredient_counts(data: RecipesFromIngredients) -> AllRecipe
     possible_recipes: list[RecipesUsingIngredient] = data.recipe_ingredients
 
     for recipe_ingredient in possible_recipes:
-        count_ingredient(recipe_counts=recipe_counts, recipe_ingredients=recipe_ingredient)
+        recipe_counts = count_ingredient(counts=recipe_counts, recipe_ingredients=recipe_ingredient)
 
     return AllRecipeCounts(recipes=recipe_counts)
 
